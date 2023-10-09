@@ -3,10 +3,11 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import authRoute from "./routes/auth";
-import userRoute from "./routes/user";
-import doctorRoute from "./routes/doctor";
+import authRoute from "./routes/auth.js";
+import userRoute from "./routes/user.js";
+import doctorRoute from "./routes/doctor.js";
 import reviewRoute from "./routes/review.js";
+
 dotenv.config();
 
 const app = express();

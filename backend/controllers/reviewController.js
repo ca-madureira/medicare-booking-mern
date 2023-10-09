@@ -1,5 +1,5 @@
-import Review from "../models/ReviewSchema";
-import Doctor from "../models/DoctorSchema";
+import Review from "../models/ReviewSchema.js";
+import Doctor from "../models/DoctorSchema.js";
 
 export const getAllReviews = async (req, res) => {
   try {
@@ -22,7 +22,7 @@ export const createReview = async (req, res) => {
   const newReview = new Review(req.body);
 
   try {
-    const savedReview = await newReview.save();
+    const savedReviews = await newReview.save();
 
     await Doctor.findByIdAndUpdate(req.body.doctor, {
       $push: { reviews: savedReviews._id },

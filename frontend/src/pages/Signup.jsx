@@ -78,7 +78,7 @@ const Signup = () => {
               Criar um <span className='text-primaryColor'>conta</span>
             </h3>
 
-            <form>
+            <form onSubmit={submitHandler}>
               <div className='mb-5'>
                 <input
                   type='text'

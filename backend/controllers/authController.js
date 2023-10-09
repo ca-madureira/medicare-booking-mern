@@ -1,5 +1,5 @@
-import User from "../models/UserSchema";
-import Doctor from "../models/DoctorSchema";
+import User from "../models/UserSchema.js";
+import Doctor from "../models/DoctorSchema.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
@@ -101,15 +101,13 @@ export const login = async (req, res) => {
 
     const { password, role, appointments, ...rest } = user._doc;
 
-    res
-      .status(200)
-      .json({
-        status: true,
-        message: "Sucesso ao logar",
-        token,
-        data: { ...rest },
-        role,
-      });
+    res.status(200).json({
+      status: true,
+      message: "Sucesso ao logar",
+      token,
+      data: { ...rest },
+      role,
+    });
   } catch (err) {
     res.status(500).json({ status: false, message: "Credenciais invalidas" });
   }
