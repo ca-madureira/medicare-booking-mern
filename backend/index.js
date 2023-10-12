@@ -18,16 +18,18 @@ const corsOptions = {
 };
 
 app.get("/", (req, res) => {
-  res.send("Api is working");
+  res.send("Api está funcionando");
 });
 
 mongoose.set("strictQuery", false);
+
 const connectDB = async () => {
   try {
     mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+    console.log("conexao funcionando normalmente com o mongodb");
   } catch (err) {
     console.log("conexao com mongo falhou");
   }
@@ -44,5 +46,5 @@ app.use("/api/reviews", reviewRoute);
 
 app.listen(port, () => {
   connectDB();
-  console.log(`Server is running on ${port}`);
+  console.log(`Servidor está rodando na porta ${port}`);
 });

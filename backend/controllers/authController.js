@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 const generateToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
-    process.env.JWT_SECRET_key,
+    process.env.JWT_SECRET_KEY,
     {
       expiresIn: "15d",
     }
@@ -19,23 +19,23 @@ export const register = async (req, res) => {
   try {
     let user = null;
     if (role === "patient") {
-      user = User.findOne({ email });
+      user = await User.findOne({ email });
     } else if (role === "doctor") {
-      user = Doctor.findOne({ email });
+      user = await Doctor.findOne({ email });
     }
 
     if (user) {
-      return res.status(400).json({ message: "Usuário ja existe" });
+      return res.status(400).json({ message: "Usuario ja existe" });
     }
 
     const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     if (role === "patient") {
       user = new User({
         name,
         email,
-        password: hashPassword,
+        password: hashedPassword,
         photo,
         gender,
         role,
@@ -46,7 +46,7 @@ export const register = async (req, res) => {
       user = new Doctor({
         name,
         email,
-        password: hashPassword,
+        password: hashedPassword,
         photo,
         gender,
         role,
@@ -59,15 +59,13 @@ export const register = async (req, res) => {
       .status(200)
       .json({ success: true, message: "Usuario criado com sucesso" });
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "erro interno no servidor, tente novamente",
-    });
+    res.status(500).json({ success: false, message: "internal server" });
   }
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
+
   try {
     let user = null;
 
@@ -83,18 +81,18 @@ export const login = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(404).json({ message: "Usuario não encontrado" });
+      return res.status(404).json({ message: "Usuario nao encontrado" });
     }
 
     const isPasswordMatch = await bcrypt.compare(
-      req.user.password,
+      req.body.password,
       user.password
     );
 
     if (!isPasswordMatch) {
       return res
         .status(400)
-        .json({ status: false, message: "credenciais invalidas" });
+        .json({ status: false, message: "Credenciais invalidas" });
     }
 
     const token = generateToken(user);
@@ -109,6 +107,6 @@ export const login = async (req, res) => {
       role,
     });
   } catch (err) {
-    res.status(500).json({ status: false, message: "Credenciais invalidas" });
+    res.status(500).json({ status: false, message: "Falha ao logar" });
   }
 };
